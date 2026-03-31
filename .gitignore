@@ -82,3 +82,8 @@ public/uploads/
 # ===========================
 *.docx
 *.doc
+
+# ===========================
+# Guides locaux (ne pas commiter)
+# ===========================
+TACHES_*.md
