@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Application web de gestion des cabinets médicaux",
   "private": true,
+  "type": "module",
   "workspaces": [
     "frontend",
     "backend"
@@ -10,8 +11,8 @@
   "scripts": {
     "lint": "npm run lint --workspaces --if-present",
     "lint:fix": "npm run lint:fix --workspaces --if-present",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\" --ignore-path .gitignore",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,css,md}\" --ignore-path .gitignore",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\" --ignore-path .gitignore --ignore-unknown",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,css,md}\" --ignore-path .gitignore --ignore-unknown",
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "dev": "concurrently \"npm run dev --workspace=backend\" \"npm run dev --workspace=frontend\""
