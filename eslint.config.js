@@ -67,9 +67,26 @@ export default [
     },
   },
 
+  // Globals Node.js pour le backend
+  {
+    files: ["backend/**/*.ts"],
+    languageOptions: {
+      globals: {
+        console: "readonly",
+        process: "readonly",
+      },
+    },
+  },
+
   // Config spécifique React (frontend uniquement)
   {
     files: ["frontend/**/*.tsx", "frontend/**/*.ts"],
+    languageOptions: {
+      globals: {
+        document: "readonly",
+        window: "readonly",
+      },
+    },
     plugins: {
       react: reactPlugin,
       "react-hooks": reactHooksPlugin,
