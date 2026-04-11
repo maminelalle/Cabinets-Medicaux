@@ -10,6 +10,7 @@ import dossiersMedicauxRoutes from "./modules/dossiers-medicaux/dossiersMedicaux
 import medecinsRoutes from "./modules/medecins/medecins.routes";
 import patientsRoutes from "./modules/patients/patients.routes";
 import prescriptionsRoutes from "./modules/prescriptions/prescriptions.routes";
+import rapportsRoutes from "./modules/rapports-statistiques/rapportsStatistiques.routes";
 import rendezVousRoutes from "./modules/rendezvous/rendezvous.routes";
 
 const app = express();
@@ -46,6 +47,7 @@ app.use("/api/dossiers-medicaux", dossiersMedicauxRoutes);
 app.use("/api/medecins", medecinsRoutes);
 app.use("/api/patients", patientsRoutes);
 app.use("/api/prescriptions", prescriptionsRoutes);
+app.use("/api/rapports", rapportsRoutes);
 app.use("/api/rendezvous", rendezVousRoutes);
 
 // ── Error handler (toujours en dernier) ───────────────────
