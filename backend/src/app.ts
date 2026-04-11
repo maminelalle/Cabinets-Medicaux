@@ -6,6 +6,7 @@ import { env } from "./config/env";
 import { errorHandler } from "./middlewares/errorHandler";
 import authRoutes from "./modules/auth/auth.routes";
 import consultationsRoutes from "./modules/consultations/consultations.routes";
+import dossiersMedicauxRoutes from "./modules/dossiers-medicaux/dossiersMedicaux.routes";
 import medecinsRoutes from "./modules/medecins/medecins.routes";
 import patientsRoutes from "./modules/patients/patients.routes";
 import prescriptionsRoutes from "./modules/prescriptions/prescriptions.routes";
@@ -41,6 +42,7 @@ app.get("/api/health", (_req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/consultations", consultationsRoutes);
+app.use("/api/dossiers-medicaux", dossiersMedicauxRoutes);
 app.use("/api/medecins", medecinsRoutes);
 app.use("/api/patients", patientsRoutes);
 app.use("/api/prescriptions", prescriptionsRoutes);
