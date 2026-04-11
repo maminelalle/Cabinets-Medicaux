@@ -5,6 +5,7 @@ import helmet from "helmet";
 import { env } from "./config/env";
 import { errorHandler } from "./middlewares/errorHandler";
 import authRoutes from "./modules/auth/auth.routes";
+import consultationsRoutes from "./modules/consultations/consultations.routes";
 import medecinsRoutes from "./modules/medecins/medecins.routes";
 import patientsRoutes from "./modules/patients/patients.routes";
 import rendezVousRoutes from "./modules/rendezvous/rendezvous.routes";
@@ -38,6 +39,7 @@ app.get("/api/health", (_req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/consultations", consultationsRoutes);
 app.use("/api/medecins", medecinsRoutes);
 app.use("/api/patients", patientsRoutes);
 app.use("/api/rendezvous", rendezVousRoutes);
