@@ -7,6 +7,7 @@ import { errorHandler } from "./middlewares/errorHandler";
 import authRoutes from "./modules/auth/auth.routes";
 import medecinsRoutes from "./modules/medecins/medecins.routes";
 import patientsRoutes from "./modules/patients/patients.routes";
+import rendezVousRoutes from "./modules/rendezvous/rendezvous.routes";
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.get("/api/health", (_req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/medecins", medecinsRoutes);
 app.use("/api/patients", patientsRoutes);
+app.use("/api/rendezvous", rendezVousRoutes);
 
 // ── Error handler (toujours en dernier) ───────────────────
 app.use(errorHandler);
