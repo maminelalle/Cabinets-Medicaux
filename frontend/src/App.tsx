@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 import AppShell from "./components/layout/AppShell";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
+import ConsultationsPage from "./pages/ConsultationsPage";
 import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "./pages/LoginPage";
 import MedecinsPage from "./pages/MedecinsPage";
@@ -21,10 +22,7 @@ function App() {
           <Route path="/patients" element={<PatientsPage />} />
           <Route path="/medecins" element={<MedecinsPage />} />
           <Route path="/rendezvous" element={<RendezVousPage />} />
-          <Route
-            path="/consultations"
-            element={<PlaceholderPage title="Consultations" description="Suivi medical des consultations." />}
-          />
+          <Route path="/consultations" element={<ConsultationsPage />} />
           <Route
             path="/prescriptions"
             element={<PlaceholderPage title="Prescriptions" description="Prescriptions et details des traitements." />}
