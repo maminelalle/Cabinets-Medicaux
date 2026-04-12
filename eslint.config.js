@@ -84,6 +84,8 @@ export default [
     languageOptions: {
       globals: {
         document: "readonly",
+        HTMLFormElement: "readonly",
+        localStorage: "readonly",
         window: "readonly",
       },
     },
