@@ -4,6 +4,7 @@ import AppShell from "./components/layout/AppShell";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
 import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "./pages/LoginPage";
+import MedecinsPage from "./pages/MedecinsPage";
 import PatientsPage from "./pages/PatientsPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 
@@ -17,10 +18,7 @@ function App() {
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/patients" element={<PatientsPage />} />
-          <Route
-            path="/medecins"
-            element={<PlaceholderPage title="Medecins" description="Gestion des medecins et disponibilites." />}
-          />
+          <Route path="/medecins" element={<MedecinsPage />} />
           <Route
             path="/rendezvous"
             element={<PlaceholderPage title="Rendez-vous" description="Planification et suivi des rendez-vous." />}
