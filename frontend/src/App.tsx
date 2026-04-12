@@ -7,6 +7,7 @@ import LoginPage from "./pages/LoginPage";
 import MedecinsPage from "./pages/MedecinsPage";
 import PatientsPage from "./pages/PatientsPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
+import RendezVousPage from "./pages/RendezVousPage";
 
 function App() {
   return (
@@ -19,10 +20,7 @@ function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/patients" element={<PatientsPage />} />
           <Route path="/medecins" element={<MedecinsPage />} />
-          <Route
-            path="/rendezvous"
-            element={<PlaceholderPage title="Rendez-vous" description="Planification et suivi des rendez-vous." />}
-          />
+          <Route path="/rendezvous" element={<RendezVousPage />} />
           <Route
             path="/consultations"
             element={<PlaceholderPage title="Consultations" description="Suivi medical des consultations." />}
