@@ -6,6 +6,7 @@ import { env } from "./config/env";
 import { errorHandler } from "./middlewares/errorHandler";
 import adminUsersRoutes from "./modules/admin-users/adminUsers.routes";
 import authRoutes from "./modules/auth/auth.routes";
+import cabinetSettingsRoutes from "./modules/cabinet-settings/cabinetSettings.routes";
 import consultationsRoutes from "./modules/consultations/consultations.routes";
 import dossiersMedicauxRoutes from "./modules/dossiers-medicaux/dossiersMedicaux.routes";
 import medecinsRoutes from "./modules/medecins/medecins.routes";
@@ -44,6 +45,7 @@ app.get("/api/health", (_req, res) => {
 
 app.use("/api/admin/users", adminUsersRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/cabinet-settings", cabinetSettingsRoutes);
 app.use("/api/consultations", consultationsRoutes);
 app.use("/api/dossiers-medicaux", dossiersMedicauxRoutes);
 app.use("/api/medecins", medecinsRoutes);
