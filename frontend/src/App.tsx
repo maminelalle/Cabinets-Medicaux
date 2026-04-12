@@ -8,6 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import MedecinsPage from "./pages/MedecinsPage";
 import PatientsPage from "./pages/PatientsPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
+import PrescriptionsPage from "./pages/PrescriptionsPage";
 import RendezVousPage from "./pages/RendezVousPage";
 
 function App() {
@@ -23,10 +24,7 @@ function App() {
           <Route path="/medecins" element={<MedecinsPage />} />
           <Route path="/rendezvous" element={<RendezVousPage />} />
           <Route path="/consultations" element={<ConsultationsPage />} />
-          <Route
-            path="/prescriptions"
-            element={<PlaceholderPage title="Prescriptions" description="Prescriptions et details des traitements." />}
-          />
+          <Route path="/prescriptions" element={<PrescriptionsPage />} />
           <Route
             path="/medicaments"
             element={<PlaceholderPage title="Medicaments" description="Inventaire, stock et alertes." />}
