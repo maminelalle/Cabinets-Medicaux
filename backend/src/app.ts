@@ -4,6 +4,7 @@ import helmet from "helmet";
 
 import { env } from "./config/env";
 import { errorHandler } from "./middlewares/errorHandler";
+import adminUsersRoutes from "./modules/admin-users/adminUsers.routes";
 import authRoutes from "./modules/auth/auth.routes";
 import consultationsRoutes from "./modules/consultations/consultations.routes";
 import dossiersMedicauxRoutes from "./modules/dossiers-medicaux/dossiersMedicaux.routes";
@@ -41,6 +42,7 @@ app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
+app.use("/api/admin/users", adminUsersRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/consultations", consultationsRoutes);
 app.use("/api/dossiers-medicaux", dossiersMedicauxRoutes);
