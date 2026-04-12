@@ -83,9 +83,12 @@ export default [
     files: ["frontend/**/*.tsx", "frontend/**/*.ts"],
     languageOptions: {
       globals: {
+        BodyInit: "readonly",
         document: "readonly",
+        fetch: "readonly",
         HTMLFormElement: "readonly",
         localStorage: "readonly",
+        URL: "readonly",
         window: "readonly",
       },
     },
