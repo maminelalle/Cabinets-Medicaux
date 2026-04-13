@@ -1,7 +1,7 @@
-import { PrismaClient, Role } from "@prisma/client";
+import { Role } from "@prisma/client";
 import bcrypt from "bcrypt";
 
-const prisma = new PrismaClient();
+import { prisma } from "../src/prisma/client";
 
 async function main() {
   // Compte admin
