@@ -8,7 +8,7 @@
     "start": "node dist/index.js",
     "lint": "eslint \"src/**/*.ts\" --report-unused-disable-directives --max-warnings 0 --no-error-on-unmatched-pattern",
     "lint:fix": "eslint \"src/**/*.ts\" --fix --no-error-on-unmatched-pattern",
-    "test": "jest --passWithNoTests",
+    "test": "jest --passWithNoTests --runInBand --forceExit",
     "test:watch": "jest --watch"
   },
   "prisma": {
@@ -21,7 +21,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@prisma/client": "^7.6.0",
+    "@prisma/client": "^7.7.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "express": "^5.2.1",
@@ -33,6 +33,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@jest/globals": "^30.3.0",
     "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
@@ -40,11 +41,12 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.5.2",
     "@types/nodemailer": "^8.0.0",
+    "@types/pg": "^8.20.0",
     "@types/redis": "^4.0.10",
     "@types/supertest": "^7.2.0",
     "dotenv": "^17.4.1",
     "jest": "^30.3.0",
-    "prisma": "^7.6.0",
+    "prisma": "^7.7.0",
     "supertest": "^7.2.2",
     "ts-jest": "^29.4.9",
     "ts-node-dev": "^2.0.0",

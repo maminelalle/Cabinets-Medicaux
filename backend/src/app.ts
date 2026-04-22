@@ -5,8 +5,16 @@ import helmet from "helmet";
 import { env } from "./config/env";
 import { errorHandler } from "./middlewares/errorHandler";
 import authRoutes from "./modules/auth/auth.routes";
+import consultationRoutes from "./modules/consultations/consultation.routes";
+import patientsRoutes from "./modules/patients/patients.routes";
+import prescriptionRoutes from "./modules/prescriptions/prescription.routes";
+import rendezvousRoutes from "./modules/rendezvous/rendezvous.routes";
+import stockRoutes from "./modules/stock/stock.routes";
+
+
 
 const app = express();
+
 
 // ── Sécurité ──────────────────────────────────────────────
 app.use(
@@ -34,7 +42,58 @@ app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
+app.get("/api/readiness", async (_req, res) => {
+  const readiness: {
+    status: string;
+    timestamp: string;
+    checks: {
+      database: string;
+      redis: string;
+    };
+  } = {
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    checks: {
+      database: "unknown",
+      redis: "unknown",
+    },
+  };
+
+  try {
+    const { prisma } = await import("./prisma/client");
+    await prisma.$queryRaw`SELECT 1`;
+    readiness.checks.database = "up";
+  } catch (error) {
+    readiness.status = "error";
+    readiness.checks.database = `down: ${error instanceof Error ? error.message : "unknown error"}`;
+  }
+
+  try {
+    const { redis } = await import("./config/redis");
+    if (redis && (redis.isOpen || redis.isReady)) {
+      readiness.checks.redis = "up";
+    } else {
+      readiness.checks.redis = "down (fallback memoire actif)";
+    }
+  } catch {
+    readiness.checks.redis = "down (fallback memoire actif)";
+  }
+
+
+  const statusCode = readiness.status === "ok" ? 200 : 503;
+  res.status(statusCode).json(readiness);
+});
+
+
 app.use("/api/auth", authRoutes);
+app.use("/api/patients", patientsRoutes);
+app.use("/api/rendezvous", rendezvousRoutes);
+app.use("/api/consultations", consultationRoutes);
+app.use("/api/prescriptions", prescriptionRoutes);
+app.use("/api/stock", stockRoutes);
+
+
+
 
 // ── Error handler (toujours en dernier) ───────────────────
 app.use(errorHandler);

@@ -7,8 +7,10 @@ export function errorHandler(
   _next: NextFunction
 ) {
   console.error(err.stack);
-  res.status(500).json({
+  const status = err.message === "Identifiants invalides" ? 401 : 500;
+  res.status(status).json({
     message: err.message ?? "Erreur interne du serveur",
     ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
   });
 }
+

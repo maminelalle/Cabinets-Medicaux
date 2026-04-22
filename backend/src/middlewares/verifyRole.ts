@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
+
 import type { JwtPayload } from "./verifyJWT";
 
 export function verifyRole(...roles: JwtPayload["role"][]) {

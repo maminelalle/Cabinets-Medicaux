@@ -1,8 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { prisma } from "../../prisma/client";
-import { redis } from "../../config/redis";
+
 import { env } from "../../config/env";
+import { redis } from "../../config/redis";
+import { prisma } from "../../prisma/client";
 
 export async function login(email: string, password: string) {
   // 1. Trouver le compte

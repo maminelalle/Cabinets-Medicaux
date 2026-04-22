@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
+
 import * as authService from "./auth.service";
 
 export async function loginHandler(req: Request, res: Response, next: NextFunction) {

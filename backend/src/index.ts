@@ -1,6 +1,6 @@
 import app from "./app";
-import { connectRedis } from "./config/redis";
 import { env } from "./config/env";
+import { connectRedis } from "./config/redis";
 
 const PORT = env.PORT;
 
