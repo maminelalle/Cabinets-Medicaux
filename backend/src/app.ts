@@ -1,6 +1,9 @@
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
+import swaggerUi from "swagger-ui-express";
+
+import { swaggerSpec } from "./config/swagger";
 
 import { env } from "./config/env";
 import { errorHandler } from "./middlewares/errorHandler";
@@ -36,6 +39,23 @@ app.use(
 // ── Body parser ───────────────────────────────────────────
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true }));
+
+// ── Documentation Swagger ────────────────────────────
+app.use(
+  "/api/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    customSiteTitle: "Cabinets Médicaux – API Docs",
+    customCss: `.swagger-ui .topbar { background-color: #1a1a2e; } .swagger-ui .topbar-wrapper img { content: none; } .swagger-ui .topbar-wrapper::before { content: '🏥 Cabinets Médicaux'; color: white; font-size: 1.2rem; font-weight: bold; }`,
+    swaggerOptions: { persistAuthorization: true },
+  })
+);
+
+// Expose la spec JSON brute
+app.get("/api/docs.json", (_req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.send(swaggerSpec);
+});
 
 // ── Routes ────────────────────────────────────────────────
 app.get("/api/health", (_req, res) => {
