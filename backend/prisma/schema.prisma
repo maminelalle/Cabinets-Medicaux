@@ -1,0 +1,243 @@
+// ─── DATASOURCE ─────────────────────────────────────────────
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+
+
+// ─── ENUM ────────────────────────────────────────────────────
+enum Role {
+  ADMIN
+  MEDECIN
+  SECRETAIRE
+}
+
+enum StatutCompte {
+  ACTIF
+  INACTIF
+  SUSPENDU
+}
+
+enum StatutRDV {
+  PLANIFIE
+  CONFIRME
+  EN_COURS
+  TERMINE
+  ANNULE
+  ABSENT
+}
+
+// ─── TABLE COMPTE ────────────────────────────────────────────
+model Compte {
+  id         String       @id @default(cuid())
+  email      String       @unique
+  motDePasse String       @map("mot_de_passe")
+  role       Role
+  statut     StatutCompte @default(ACTIF)
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @map("updated_at")
+
+  medecin   Medecin?
+  personnel Personnel?
+
+  @@map("compte")
+}
+
+// ─── TABLE MEDECIN ───────────────────────────────────────────
+model Medecin {
+  id             String   @id @default(cuid())
+  compteId       String   @unique @map("compte_id")
+  nom            String
+  prenom         String
+  specialite     String
+  telephone      String?
+  numeroOrdre    String?  @unique @map("numero_ordre")
+  formation      String?
+  experience     String?
+  disponibilites Json?
+  statut         Boolean  @default(true)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  compte        Compte         @relation(fields: [compteId], references: [id])
+  rendezvous    RendezVous[]
+  consultations Consultation[]
+
+  @@map("medecin")
+}
+
+// ─── TABLE PERSONNEL ─────────────────────────────────────────
+model Personnel {
+  id        String   @id @default(cuid())
+  compteId  String   @unique @map("compte_id")
+  nom       String
+  prenom    String
+  telephone String?
+  poste     String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  compte Compte @relation(fields: [compteId], references: [id])
+
+  @@map("personnel")
+}
+
+// ─── TABLE PATIENT ───────────────────────────────────────────
+model Patient {
+  id            String    @id @default(cuid())
+  numeroDossier String    @unique @map("numero_dossier")
+  nom           String
+  prenom        String
+  dateNaissance DateTime  @map("date_naissance")
+  sexe          String
+  nni           String    @unique
+  telephone     String?
+  email         String?
+  adresse       String?
+  groupeSanguin String?   @map("groupe_sanguin")
+  antecedents   String?
+  allergies     String?
+  deletedAt     DateTime? @map("deleted_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  rendezvous       RendezVous[]
+  consultations    Consultation[]
+  dossiersMedicaux DossierMedical[]
+
+  @@map("patient")
+}
+
+// ─── TABLE RENDEZ_VOUS ───────────────────────────────────────
+model RendezVous {
+  id        String    @id @default(cuid())
+  patientId String    @map("patient_id")
+  medecinId String    @map("medecin_id")
+  dateHeure DateTime  @map("date_heure")
+  duree     Int       @default(30)
+  motif     String?
+  statut    StatutRDV @default(PLANIFIE)
+  notes     String?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  patient      Patient       @relation(fields: [patientId], references: [id])
+  medecin      Medecin       @relation(fields: [medecinId], references: [id])
+  consultation Consultation?
+
+  @@index([patientId])
+  @@index([medecinId])
+  @@index([dateHeure])
+  @@map("rendez_vous")
+}
+
+// ─── TABLE CONSULTATION ──────────────────────────────────────
+model Consultation {
+  id                String   @id @default(cuid())
+  rdvId             String   @unique @map("rdv_id")
+  patientId         String   @map("patient_id")
+  medecinId         String   @map("medecin_id")
+  motif             String
+  symptomes         String?
+  diagnostic        String?
+  traitement        String?
+  tensionArterielle String?  @map("tension_arterielle")
+  poids             Float?
+  temperature       Float?
+  notes             String?
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  rendezvous    RendezVous     @relation(fields: [rdvId], references: [id])
+  patient       Patient        @relation(fields: [patientId], references: [id])
+  medecin       Medecin        @relation(fields: [medecinId], references: [id])
+  prescriptions Prescription[]
+
+  @@index([patientId])
+  @@index([medecinId])
+  @@map("consultation")
+}
+
+// ─── TABLE PRESCRIPTION ──────────────────────────────────────
+model Prescription {
+  id             String   @id @default(cuid())
+  consultationId String   @map("consultation_id")
+  notes          String?
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  consultation Consultation      @relation(fields: [consultationId], references: [id])
+  items        PrescriptionItem[]
+
+  @@index([consultationId])
+  @@map("prescription")
+}
+
+model PrescriptionItem {
+  id             String @id @default(cuid())
+  prescriptionId String @map("prescription_id")
+  medicamentId   String @map("medicament_id")
+  posologie      String
+  duree          String
+  quantite       Int
+
+  prescription Prescription @relation(fields: [prescriptionId], references: [id])
+  medicament   Medicament   @relation(fields: [medicamentId], references: [id])
+
+  @@index([prescriptionId])
+  @@map("prescription_item")
+}
+
+// ─── TABLE MEDICAMENT ────────────────────────────────────────
+model Medicament {
+  id             String    @id @default(cuid())
+  nom            String
+  forme          String?
+  dosage         String?
+  stockActuel    Int       @default(0) @map("stock_actuel")
+  seuilAlerte    Int       @default(10) @map("seuil_alerte")
+  dateExpiration DateTime? @map("date_expiration")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  prescriptionItems PrescriptionItem[]
+  mouvements        MouvementStock[]
+
+  @@map("medicament")
+}
+
+// ─── TABLE MOUVEMENT_STOCK ───────────────────────────────────
+model MouvementStock {
+  id           String   @id @default(cuid())
+  medicamentId String   @map("medicament_id")
+  type         String
+  quantite     Int
+  motif        String?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  medicament Medicament @relation(fields: [medicamentId], references: [id])
+
+  @@index([medicamentId])
+  @@map("mouvement_stock")
+}
+
+// ─── TABLE DOSSIER_MEDICAL ───────────────────────────────────
+model DossierMedical {
+  id         String   @id @default(cuid())
+  patientId  String   @map("patient_id")
+  titre      String
+  type       String
+  fichierUrl String?  @map("fichier_url")
+  notes      String?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  @@index([patientId])
+  @@map("dossier_medical")
+}
