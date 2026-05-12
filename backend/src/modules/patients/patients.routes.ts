@@ -1,16 +1,19 @@
 import { Router } from "express";
 
+import { validate } from "../../middlewares/validate";
 import { verifyJWT } from "../../middlewares/verifyJWT";
 
 import { patientsController } from "./patients.controller";
-
+import { createPatientSchema } from "./patients.schema";
 
 const router = Router();
 
-// Routes protégées par JWT (à ajuster selon les besoins)
 router.use(verifyJWT);
 
-router.post("/", patientsController.create);
+router.post("/", validate(createPatientSchema), patientsController.create);
 router.get("/", patientsController.getAll);
+router.get("/:id", patientsController.getOne);
+router.patch("/:id", patientsController.update);
+router.delete("/:id", patientsController.softDelete);
 
 export default router;

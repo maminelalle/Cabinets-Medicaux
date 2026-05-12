@@ -1,5 +1,7 @@
 import { prisma } from "../../prisma/client";
 
+type StatutRDV = "PLANIFIE" | "CONFIRME" | "EN_COURS" | "TERMINE" | "ANNULE" | "ABSENT";
+
 export const rendezvousService = {
   async createRendezVous(data: {
     patientId: string;
@@ -7,8 +9,8 @@ export const rendezvousService = {
     dateHeure: string | Date;
     duree?: number;
     motif?: string;
+    notes?: string;
   }) {
-    // Vérification de conflit (même médecin, même créneau)
     const date = new Date(data.dateHeure);
     const end = new Date(date.getTime() + (data.duree || 30) * 60000);
 
@@ -16,26 +18,22 @@ export const rendezvousService = {
       where: {
         medecinId: data.medecinId,
         statut: { not: "ANNULE" },
-        OR: [
-          {
-            dateHeure: {
-              gte: date,
-              lt: end,
-            },
-          },
-        ],
+        OR: [{ dateHeure: { gte: date, lt: end } }],
       },
     });
 
-    if (conflict) {
-      throw new Error("Conflit d'horaire");
-    }
+    if (conflict) throw new Error("Conflit d'horaire");
 
     return prisma.rendezVous.create({
-      data: {
-        ...data,
-        dateHeure: date,
-      },
+      data: { ...data, dateHeure: date },
+    });
+  },
+
+  async getAllRendezVous(filters?: { patientId?: string; medecinId?: string }) {
+    return prisma.rendezVous.findMany({
+      where: filters,
+      include: { patient: true, medecin: true },
+      orderBy: { dateHeure: "asc" },
     });
   },
 
@@ -46,11 +44,9 @@ export const rendezvousService = {
     });
   },
 
-  async updateStatut(id: string, statut: "PLANIFIE" | "CONFIRME" | "EN_COURS" | "TERMINE" | "ANNULE" | "ABSENT") {
-
-    return prisma.rendezVous.update({
-      where: { id },
-      data: { statut },
-    });
+  async updateStatut(id: string, statut: StatutRDV) {
+    const rdv = await prisma.rendezVous.findUnique({ where: { id } });
+    if (!rdv) throw new Error("Rendez-vous non trouvé");
+    return prisma.rendezVous.update({ where: { id }, data: { statut } });
   },
 };

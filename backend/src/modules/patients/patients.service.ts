@@ -17,10 +17,7 @@ export interface PatientData {
 
 export const patientsService = {
   async createPatient(data: PatientData) {
-
-    return prisma.patient.create({
-      data,
-    });
+    return prisma.patient.create({ data });
   },
 
   async getAllPatients() {
@@ -31,8 +28,17 @@ export const patientsService = {
   },
 
   async getPatientById(id: string) {
-    return prisma.patient.findUnique({
+    return prisma.patient.findFirst({ where: { id, deletedAt: null } });
+  },
+
+  async updatePatient(id: string, data: Partial<PatientData>) {
+    return prisma.patient.update({ where: { id }, data });
+  },
+
+  async softDeletePatient(id: string) {
+    return prisma.patient.update({
       where: { id },
+      data: { deletedAt: new Date() },
     });
   },
 };
